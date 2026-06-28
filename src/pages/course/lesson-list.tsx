@@ -1,4 +1,5 @@
 import defaultThumbnail from "@/assets/hero.png";
+import { CircularProgress } from "@/components/circular-progress";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { CourseModule, Lesson } from "@/types/database";
@@ -148,6 +149,10 @@ export function LessonList({
   onSelectLesson,
 }: LessonListProps) {
   const completedCount = lessons.filter((lesson) => lesson.isCompleted).length;
+  const progressPercent =
+    lessons.length > 0
+      ? Math.round((completedCount / lessons.length) * 100)
+      : 0;
 
   const ungrouped = lessons.filter((l) => !l.module_id);
   const grouped = modules.map((mod) => ({
@@ -158,20 +163,23 @@ export function LessonList({
   let offset = 0;
 
   return (
-    <aside className="flex w-full flex-col border-t border-border bg-muted/20 px-4 py-4 lg:h-full lg:min-h-0 lg:max-w-[420px] lg:shrink-0 lg:self-stretch lg:border-t-0 lg:border-l">
-      <div className="mb-4 flex shrink-0 items-end justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold">Aulas do curso</h2>
-          <p className="text-sm text-muted-foreground">
+    <aside className="flex w-full flex-col border-t border-border bg-card/80 px-4 py-4 backdrop-blur-sm lg:sticky lg:top-0 lg:h-[calc(100svh-4rem)] lg:max-w-[420px] lg:shrink-0 lg:overflow-hidden lg:border-t-0 lg:border-l lg:shadow-[-8px_0_24px_-12px_rgba(0,0,0,0.08)] dark:lg:shadow-[-8px_0_24px_-12px_rgba(0,0,0,0.35)]">
+      <div className="mb-4 flex shrink-0 items-center gap-3 border-b border-border/60 pb-4">
+        <div className="min-w-0 flex-1">
+          <h2 className="text-base font-semibold tracking-tight">
+            Aulas do curso
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
             {completedCount} de {lessons.length} concluídas
           </p>
+          <p className="mt-0.5 text-xs text-muted-foreground/75">
+            {lessons.length} aulas no total
+          </p>
         </div>
-        <span className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground">
-          {lessons.length} aulas
-        </span>
+        <CircularProgress value={progressPercent} size={56} strokeWidth={5} />
       </div>
 
-      <div className="flex max-h-80 flex-col gap-3 overflow-y-auto pr-1 lg:max-h-none lg:min-h-0 lg:flex-1">
+      <div className="flex max-h-80 flex-col gap-3 overflow-y-auto pr-1 lg:min-h-0 lg:flex-1 lg:max-h-none">
         {modules.length === 0 ? (
           lessons.map((lesson, index) => (
             <LessonItem

@@ -3,7 +3,6 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { CertificateModal } from "@/components/certificate-modal";
 import { ScoreBadge } from "@/components/exam/score-badge";
-import { ProgressBar } from "@/components/progress-bar";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { calculateCourseDurationHours } from "@/lib/course-duration";
@@ -159,27 +158,9 @@ export function CoursePage() {
     );
   }
 
-  const completedCount = lessons.filter((lesson) => lesson.isCompleted).length;
-  const progressPercent =
-    lessons.length > 0
-      ? Math.round((completedCount / lessons.length) * 100)
-      : 0;
-
   return (
     <>
-      <div className="border-b border-border bg-card px-4 py-4">
-        <div className="mx-auto flex max-w-3xl flex-col gap-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="font-medium">
-              Progresso: {completedCount} de {lessons.length} aulas concluídas
-            </span>
-            <span className="text-muted-foreground">{progressPercent}%</span>
-          </div>
-          <ProgressBar value={progressPercent} />
-        </div>
-      </div>
-
-      <div className="flex flex-col lg:min-h-[calc(100svh-3rem)] lg:flex-row lg:items-stretch">
+      <div className="flex flex-col lg:flex-row lg:items-start">
         <div className="flex min-w-0 flex-1 flex-col gap-4 p-4">
           <VideoPlayer
             lesson={activeLesson}
